@@ -3,6 +3,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+
 import javax.swing.JPanel;
 
 public class GamePanel extends JPanel {
@@ -24,7 +25,6 @@ public class GamePanel extends JPanel {
         for (Sprite s : sprites) {
             s.draw(big);
         }
-
         repaint();
     }
 
