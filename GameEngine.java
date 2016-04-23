@@ -8,7 +8,7 @@ import java.util.Iterator;
 
 import javax.swing.Timer;
 
-public class GameEngine implements KeyListener{
+public class GameEngine implements KeyListener, GameReporter{
 
     GamePanel gp;
 
@@ -17,6 +17,7 @@ public class GameEngine implements KeyListener{
 
     private Timer timer;
 
+    private long score = 0;
     private double difficulty = 0.1;
 
     public GameEngine(GamePanel gp, SpaceShip v) {
@@ -58,10 +59,11 @@ public class GameEngine implements KeyListener{
             if (!e.isAlive()) {
                 e_iter.remove();
                 gp.sprites.remove(e);
+                score += 100;
             }
         }
 
-       gp.updateGameUI();
+       gp.updateGameUI(this);
 
         Rectangle2D.Double vr = v.getRectangle();
         Rectangle2D.Double er;
@@ -85,6 +87,11 @@ public class GameEngine implements KeyListener{
                 difficulty += 0.1;
                 break;
         }
+    }
+
+    @Override
+    public long getScore() {
+        return score;
     }
 
     @Override
