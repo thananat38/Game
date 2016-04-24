@@ -70,9 +70,14 @@ public class GameEngine implements KeyListener, GameReporter{
         for (Enemy e : enemies) {
             er = e.getRectangle();
             if (er.intersects(vr)) {
+                die();
                 return;
             }
         }
+    }
+
+    public void die() {
+        timer.stop();
     }
 
     void controlVehicle(KeyEvent e) {
