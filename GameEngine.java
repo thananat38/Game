@@ -20,6 +20,8 @@ public class GameEngine implements KeyListener, GameReporter{
     private long score = 0;
     private double difficulty = 0.1;
 
+    private int hp = 5;
+
     public GameEngine(GamePanel gp, SpaceShip v) {
         this.gp = gp;
         this.v = v;
@@ -70,7 +72,12 @@ public class GameEngine implements KeyListener, GameReporter{
         for (Enemy e : enemies) {
             er = e.getRectangle();
             if (er.intersects(vr)) {
-                die();
+                e.dieEnemy();
+                hp--;
+                gp.updateGameUI(this);
+                if (hp == 0) {
+                    die();
+                }
                 return;
             }
         }
@@ -97,6 +104,10 @@ public class GameEngine implements KeyListener, GameReporter{
     @Override
     public long getScore() {
         return score;
+    }
+
+    public int getHp() {
+        return hp;
     }
 
     @Override
