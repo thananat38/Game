@@ -8,11 +8,14 @@ import java.util.Iterator;
 
 import javax.swing.Timer;
 
-public class GameEngine implements KeyListener, GameReporter{
+public class GameEngine implements KeyListener,GameReporter{
 
     GamePanel gp;
 
     private ArrayList<Enemy> enemies = new ArrayList<Enemy>();
+    private ArrayList<BoxHp> bhp = new ArrayList<BoxHp>();
+    private int checkHp = 0;
+    private int numHp = 0;
     private SpaceShip v;
 
     private Timer timer;
@@ -48,9 +51,23 @@ public class GameEngine implements KeyListener, GameReporter{
         enemies.add(e);
     }
 
+    private void generateBoxHp() {
+        BoxHp e = new BoxHp((int) (Math.random() * 390), 30);
+        gp.sprites.add(e);
+        bhp.add(e);
+    }
+
     private void process() {
         if (Math.random() < difficulty) {
             generateEnemy();
+        }
+
+        if(score%2200 == 0 && score != 0 && numHp == checkHp){
+            generateBoxHp();
+            numHp++;
+        }
+        if(score%2200 == 100 && score != 100 && numHp > checkHp){
+            checkHp++;
         }
 
         Iterator<Enemy> e_iter = enemies.iterator();
@@ -65,7 +82,18 @@ public class GameEngine implements KeyListener, GameReporter{
             }
         }
 
-       gp.updateGameUI(this);
+        Iterator<BoxHp> e_iterbox = bhp.iterator();
+        while (e_iterbox.hasNext()) {
+            BoxHp e = e_iterbox.next();
+            e.proceed();
+
+            if (!e.isAlive()) {
+                e_iterbox.remove();
+                gp.sprites.remove(e);
+            }
+        }
+
+        gp.updateGameUI(this);
 
         Rectangle2D.Double vr = v.getRectangle();
         Rectangle2D.Double er;
@@ -78,6 +106,19 @@ public class GameEngine implements KeyListener, GameReporter{
                 if (hp == 0) {
                     die();
                 }
+                return;
+            }
+        }
+
+        Rectangle2D.Double vrb = v.getRectangle();
+        Rectangle2D.Double erb;
+        for (BoxHp e : bhp) {
+            erb = e.getRectangle();
+            if (erb.intersects(vrb)) {
+                if(hp<5){
+                    hp++;
+                }
+                gp.updateGameUI(this);
                 return;
             }
         }
