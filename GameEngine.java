@@ -6,9 +6,10 @@ import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import javax.swing.JFrame;
 import javax.swing.Timer;
 
-public class GameEngine implements KeyListener,GameReporter{
+public class GameEngine implements KeyListener, GameReporter{
 
     GamePanel gp;
 
@@ -24,8 +25,10 @@ public class GameEngine implements KeyListener,GameReporter{
     private double difficulty = 0.1;
 
     private int hp = 5;
+    private JFrame frame;
 
-    public GameEngine(GamePanel gp, SpaceShip v) {
+    public GameEngine(GamePanel gp, SpaceShip v,JFrame frame) {
+        this.frame=frame;
         this.gp = gp;
         this.v = v;
         
@@ -105,6 +108,8 @@ public class GameEngine implements KeyListener,GameReporter{
                 gp.updateGameUI(this);
                 if (hp == 0) {
                     die();
+                    Endgame end = new Endgame(frame);
+                    end.pop_upend(this);
                 }
                 return;
             }
